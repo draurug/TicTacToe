@@ -14,15 +14,15 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">border: 1px solid darkgrey; border-radius: 10px; padding: 10px; </string>
+   <string notr="true"/>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QDialogButtonBox" name="dialogButtonBox">
    <property name="geometry">
     <rect>
-     <x>120</x>
-     <y>300</y>
+     <x>220</x>
+     <y>291</y>
      <width>341</width>
-     <height>32</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="orientation">
@@ -31,14 +31,17 @@
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
    </property>
+   <property name="centerButtons">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>30</x>
      <y>50</y>
-     <width>91</width>
-     <height>31</height>
+     <width>101</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -49,9 +52,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>90</y>
-     <width>81</width>
-     <height>31</height>
+     <y>110</y>
+     <width>101</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -62,9 +65,9 @@
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>130</y>
-     <width>81</width>
-     <height>31</height>
+     <y>170</y>
+     <width>101</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -74,30 +77,30 @@
   <widget class="QLineEdit" name="m_address">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>150</x>
      <y>50</y>
-     <width>113</width>
-     <height>26</height>
+     <width>241</width>
+     <height>41</height>
     </rect>
    </property>
   </widget>
   <widget class="QLineEdit" name="m_port">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>90</y>
-     <width>113</width>
-     <height>26</height>
+     <x>150</x>
+     <y>110</y>
+     <width>241</width>
+     <height>41</height>
     </rect>
    </property>
   </widget>
   <widget class="QLineEdit" name="m_username">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>130</y>
-     <width>113</width>
-     <height>26</height>
+     <x>150</x>
+     <y>170</y>
+     <width>241</width>
+     <height>41</height>
     </rect>
    </property>
   </widget>
@@ -105,7 +108,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>dialogButtonBox</sender>
    <signal>accepted()</signal>
    <receiver>SettingsDialog</receiver>
    <slot>accept()</slot>
@@ -121,7 +124,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>buttonBox</sender>
+   <sender>dialogButtonBox</sender>
    <signal>rejected()</signal>
    <receiver>SettingsDialog</receiver>
    <slot>reject()</slot>

@@ -4,9 +4,9 @@
 #include <QMessageBox>
 #include <QApplication>
 
-Scene::Scene(QWidget *parent) : QWidget(parent)
+Scene::Scene(QWidget* parent) : QWidget(parent)
 {
-   // setFixedSize(300, 350);
+    // setFixedSize(300, 350);
 
     // Initialize game m_grid
     for (int i = 0; i < 3; ++i) {
@@ -35,7 +35,7 @@ void Scene::positionChanged(QVector<int> vector)
 }
 
 
-void Scene::paintEvent(QPaintEvent *event)
+void Scene::paintEvent(QPaintEvent* event)
 {
     QPainter painter(this);
     painter.setPen(Qt::black);
@@ -71,7 +71,7 @@ void Scene::mouseReleaseEvent(QMouseEvent *event)
         emit onClick(row, col, 1);
 
         // if (m_grid[row][col] == 0)
-            // {
+        // {
         //     m_grid[row][col] = currentPlayer;
         //     update();
 
@@ -129,25 +129,25 @@ bool Scene::checkDraw()
     return true;
 }
 
-void Scene::endGame(int winner)
+ void Scene::endGame(int winner)
 {
-    gameActive = false;
+     gameActive = false;
 
-    QString message;
-    if (winner == 1) {
-        message = "Player X wins!";
-        scoreX++;
-    } else if (winner == 2) {
-        message = "Player O wins!";
-        scoreO++;
-    } else {
-        message = "It's a draw!";
-    }
+     QString message;
+     if (winner == 1) {
+         message = "Player X wins!";
+         scoreX++;
+     } else if (winner == 2) {
+         message = "Player O wins!";
+         scoreO++;
+     } else {
+         message = "It's a draw!";
+     }
 
-    scoreLabel->setText("Score - X: " + QString::number(scoreX) + "  O: " + QString::number(scoreO));
+     scoreLabel->setText("Score - X: " + QString::number(scoreX) + "  O: " + QString::number(scoreO));
 
-    QMessageBox::information(this, "Game Result", message);
-}
+     QMessageBox::information(this, "Game Result", message);
+ }
 
 void Scene::resetGame()
 {
@@ -187,3 +187,4 @@ void Scene::quitClicked()
 {
     QApplication::quit();
 }
+

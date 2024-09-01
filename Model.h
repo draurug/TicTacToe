@@ -16,5 +16,3 @@ public:
     Settings* settings() {return m_settings;}
     Logic* logic() {return m_logic;}
 };
-
-
