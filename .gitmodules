@@ -1,0 +1,3 @@
+[submodule "Server-Lessons"]
+	path = Server-Lessons
+	url = https://github.com/itzmew/Server-Lessons
