@@ -1,6 +1,6 @@
 #include "Logic.h"
 #include <QVector>
-Logic::Logic() {}
+
 
 void Logic::onClick(int x, int y, int value)
 {

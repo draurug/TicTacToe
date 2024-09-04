@@ -2,23 +2,28 @@
 #include "Settings.h"
 
 Settings::Settings()
-    : m_settings("MyCompany", "MyApp")  // Инициализация QSettings с указанием компании и приложения
+    : m_qSettings("MyCompanyTicTac", "MyAppTicTac")  // Инициализация QSettings с указанием компании и приложения
 {
     load();  // Загрузка настроек при создании объекта
 }
 
-void Settings::load()
+bool Settings::load()
 {
-    m_address = m_settings.value("address", "localhost").toString();
-    m_port = m_settings.value("port", 5555).toInt();
-    m_username = m_settings.value("username", "user").toString();
+    if ( ! m_qSettings.contains("address") )
+    {
+        return false;
+    }
+    m_address = m_qSettings.value("address", "localhost").toString();
+    m_port = m_qSettings.value("port", 5555).toInt();
+    m_username = m_qSettings.value("username", "user").toString();
+    return true;
 }
 
 void Settings::save()
 {
-    m_settings.setValue("address", m_address);
-    m_settings.setValue("port", m_port);
-    m_settings.setValue("username", m_username);
+    m_qSettings.setValue("address", m_address);
+    m_qSettings.setValue("port", m_port);
+    m_qSettings.setValue("username", m_username);
 }
 
 QString Settings::getAddress() const

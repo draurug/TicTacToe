@@ -9,10 +9,15 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_definitions(-DSTANDALONE_TEST)
+set(PROJECT_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/Server-Lessons/EasyTcpServerClient)
+add_subdirectory(Server-Lessons/EasyTcpServerClient)
+
+
 if (APPLE)
     set(CMAKE_PREFIX_PATH "~/Qt/6.4.0/macos")
-    set(BOOST_INCLUDE_DIR "/usr/local/include")
-    set(BOOST_LIB_DIR "/usr/local/lib")
+
     add_definitions(-DBOOST_ASIO_HAS_STD_INVOKE_RESULT)
 #    set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl")
 #    set(OPENSSL_LIBRARIES "/usr/local/opt/openssl/lib")
@@ -21,8 +26,9 @@ if (APPLE)
 #    link_directories(/usr/local/opt/openssl/lib)
 endif()
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Boost)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(Boost 1.70 REQUIRED)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -80,6 +86,8 @@ install(TARGETS TicTacToe
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+target_include_directories(TicTacToe PRIVATE ${Boost_INCLUDE_DIRS})
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(TicTacToe)

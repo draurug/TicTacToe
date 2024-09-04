@@ -1,18 +1,28 @@
 #pragma once
 
+#include <cassert>
+
 class Settings;
 class Logic;
 class Model;
 
-Model& model();
+Model& modelInstance();
 
 class Model
 {
-    Settings* m_settings;
-    Logic* m_logic;
+    Settings*   m_settings;
+    Logic*      m_logic = nullptr;
 
 public:
     Model();
-    Settings* settings() {return m_settings;}
-    Logic* logic() {return m_logic;}
+
+    void initLogic();
+
+    Settings& settings() { return *m_settings; }
+
+    Logic&    logic()
+    {
+        assert( m_logic!=nullptr );
+        return *m_logic;
+    }
 };

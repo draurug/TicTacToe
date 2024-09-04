@@ -2,14 +2,19 @@
 #include "Logic.h"
 #include "Settings.h"
 
-Model::Model()
-{
-    m_logic = new Logic;
-    m_settings = new Settings;
-}
-
-Model& model()
+Model& modelInstance()
 {
     static Model model;
     return model;
+}
+
+Model::Model()
+{
+    m_settings = new Settings;
+}
+
+void   Model::initLogic()
+{
+    assert( m_logic==nullptr );
+    m_logic = new Logic( m_settings->getUsername().toStdString() );
 }

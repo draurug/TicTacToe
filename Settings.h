@@ -8,7 +8,7 @@ class Settings
 {
 public:
     Settings();
-    void load();
+    bool load();
     void save();
 
     QString getAddress() const;
@@ -24,7 +24,7 @@ private:
     QString m_address;
     int m_port;
     QString m_username;
-    QSettings m_settings;
+    QSettings m_qSettings;
 };
 
 //v1

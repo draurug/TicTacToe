@@ -15,6 +15,8 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
+    void init();
+
 private:
     Ui::MainWindow* ui;
     Scene *scene;
