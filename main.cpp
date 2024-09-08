@@ -23,27 +23,43 @@ int main(int argc, char *argv[])
     }
     modelInstance().initLogic();
 
-    // Создаем основное окно
-    MainWindow mainWindow;
-    mainWindow.show();
-    mainWindow.init();
-
 #ifdef STANDALONE_TEST
     tic_tac::TicTacServer server( "127.0.0.1", "15001" );
-    std::thread( [&server] { server.run(); }).detach();
+    auto serverThread = std::thread( [&server] { server.run(); });
 
     usleep(1000);
 
-    std::thread( []
-    {
-        tic_tac::DbgTicTacClient client( "Player0" );
-        client.run( "127.0.0.1", "15001" );
-    }).detach();
+    tic_tac::DbgTicTacClient client( "Player2" );
 
+    auto clientThread = std::thread( [&]
+    {
+        client.run( "127.0.0.1", "15001" );
+    });
 #endif
 
+    // Создаем основное окно
+    MainWindow mainWindow( [&]
+    {
+#ifdef STANDALONE_TEST
+        server.shutdown();
+        client.closeSocket();
+
+        if ( clientThread.joinable() )
+        {
+            clientThread.join();
+
+        }
+        serverThread.join();
+#endif
+    });
+    mainWindow.show();
+    mainWindow.init();
+
+    modelInstance().startTcpClient();
+
     // Запуск цикла обработки событий
-    return app.exec();
+    int rc = app.exec();
+    return rc;
 }
 
 //v1

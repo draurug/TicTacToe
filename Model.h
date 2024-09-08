@@ -17,6 +17,7 @@ public:
     Model();
 
     void initLogic();
+    void startTcpClient();
 
     Settings& settings() { return *m_settings; }
 

@@ -21,8 +21,8 @@ public:
     void setUsername(const QString &username);
 
 private:
-    QString m_address;
-    int m_port;
+    QString m_address = "127.0.0.1";
+    int m_port        = 15001;
     QString m_username;
     QSettings m_qSettings;
 };

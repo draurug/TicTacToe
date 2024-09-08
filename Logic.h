@@ -17,6 +17,7 @@ class Logic : public QObject, public tic_tac::TicTacClient
     int m_grid[GRID_SIZE][GRID_SIZE] = {0};
 
     std::string m_playerName;
+    std::thread m_thread;
 
 public:
     Logic( std::string playerName ) : tic_tac::TicTacClient(playerName), m_playerName(playerName)
@@ -24,17 +25,25 @@ public:
 
     void runTcpClient( std::string addr, std::string port )
     {
-        std::thread( [this]
+        m_thread = std::thread( [this]
         {
             tic_tac::TicTacClient::run( "127.0.0.1", "15001" );
-        }).detach();
+        });
     }
 
-protected:
-    virtual void onPlayerListChanged() override {
-        LOG( "m_availablePlayList: " << m_availablePlayList.size() );
-        LOG( "m_availablePlayList: " << m_availablePlayList.size() );
+    void closeTcpClient( std::string addr, std::string port )
+    {
+        closeSocket();
+        m_thread.join();
     }
+
+    void sendInvitationTo( std::string playerName );
+
+    void cancelInvitation( std::string partnerName );
+
+
+protected:
+    virtual void onPlayerListChanged() override;
 
     // returned 'true'  -> if invitation accepted
     // returned 'false' -> if invitation rejected
@@ -57,5 +66,6 @@ public slots:
     void onClick(int x, int y, int value);
 
 signals:
-    void positionChanged(QVector<int>); // Объявляем сигнал с массивом
+    void positionChanged( QVector<int> ); // Объявляем сигнал с массивом
+    void onPlayerListChangedSignal( std::map<std::string,bool> );
 };

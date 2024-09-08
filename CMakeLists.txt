@@ -46,6 +46,10 @@ set(PROJECT_SOURCES
         SettingsDialog.h
         SettingsDialog.cpp
         SettingsDialog.ui
+
+        WaitingInvitationResponseDialog.h
+        WaitingInvitationResponseDialog.cpp
+        WaitingInvitationResponseDialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

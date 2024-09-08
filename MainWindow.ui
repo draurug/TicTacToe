@@ -24,10 +24,49 @@
      </rect>
     </property>
    </widget>
+   <widget class="QPushButton" name="m_inviteBtn">
+    <property name="geometry">
+     <rect>
+      <x>12</x>
+      <y>400</y>
+      <width>88</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Invite</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="m_playerTable">
+    <property name="geometry">
+     <rect>
+      <x>4</x>
+      <y>12</y>
+      <width>213</width>
+      <height>369</height>
+     </rect>
+    </property>
+    <property name="rowCount">
+     <number>1</number>
+    </property>
+    <property name="columnCount">
+     <number>1</number>
+    </property>
+    <row>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>Player Name</string>
+     </property>
+    </column>
+   </widget>
    <widget class="QPushButton" name="m_settings">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>128</x>
       <y>400</y>
       <width>88</width>
       <height>26</height>
@@ -44,7 +83,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

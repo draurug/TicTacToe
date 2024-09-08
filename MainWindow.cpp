@@ -6,11 +6,15 @@
 #include "Scene.h"
 #include "Model.h"
 #include "Logic.h"
-#include <QDebug>
+#include "WaitingInvitationResponseDialog.h"
 
-MainWindow::MainWindow(QWidget *parent)
+#include <QDebug>
+#include <QString>
+
+MainWindow::MainWindow( std::function<void()> closeStandaloneTest, QWidget *parent )
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , m_closeStandaloneTest(closeStandaloneTest)
 {
 }
 
@@ -19,6 +23,8 @@ void MainWindow::init()
     ui->setupUi(this);
     connect( ui->m_scene, &Scene::onClick, &modelInstance().logic(), &Logic::onClick );
     connect( &modelInstance().logic(), &Logic::positionChanged, ui->m_scene, &Scene::positionChanged );
+    connect( &modelInstance().logic(), &Logic::onPlayerListChangedSignal, this, &MainWindow::onPlayerListChangedSlot, Qt::QueuedConnection );
+
     connect( ui->m_settings, &QPushButton::released, this, [this]
     {
         SettingsDialog dialog(this);
@@ -27,12 +33,55 @@ void MainWindow::init()
             qDebug() << "Accepted";
         }
     });
+
+    connect( ui->m_inviteBtn, &QPushButton::released, this, [this]
+    {
+        auto* currentItem = ui->m_playerTable->currentItem();
+        if ( currentItem == nullptr )
+        {
+            return;
+        }
+
+        auto playerName = ui->m_playerTable->currentItem()->text().toStdString();
+
+        modelInstance().logic().sendInvitationTo( playerName );
+
+        m_waitingInvitationResponseDialog = new WaitingInvitationResponseDialog( playerName );
+        m_waitingInvitationResponseDialog->exec();
+    });
+
+    ui->m_playerTable->setColumnWidth( 0, ui->m_playerTable->width() );
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    modelInstance().logic().closeSocket();
+    m_closeStandaloneTest();
+    event->accept();
+}
+
+void MainWindow::onPlayerListChangedSlot( std::map<std::string,bool> playerList )
+{
+    ui->m_playerTable->setRowCount(0);
+
+    for( const auto& playerInfo : playerList )
+    {
+        int rowCount = ui->m_playerTable->rowCount();
+        ui->m_playerTable->insertRow(rowCount); // Insert a new row at the end
+
+        // Set data for each cell in the new row
+        if ( playerInfo.second )
+        {
+            ui->m_playerTable->setItem(rowCount, 0, new QTableWidgetItem( QString::fromStdString( playerInfo.first ) ));
+        }
+    }
+}
+
 
 //v1
 // #include "MainWindow.h"

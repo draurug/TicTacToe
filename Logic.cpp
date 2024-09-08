@@ -22,3 +22,19 @@ void Logic::onClick(int x, int y, int value)
 
     }
 }
+
+void Logic::sendInvitationTo( std::string playerName )
+{
+    this->sendInvitaion( playerName );
+}
+
+void Logic::cancelInvitation( std::string partnerName )
+{
+    this->sendCloseGame( partnerName );
+}
+
+void Logic::onPlayerListChanged()
+{
+    LOG( "m_availablePlayList: " << m_availablePlayList.size() );
+    emit onPlayerListChangedSignal( m_availablePlayList );
+}

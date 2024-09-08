@@ -14,7 +14,7 @@ bool Settings::load()
         return false;
     }
     m_address = m_qSettings.value("address", "localhost").toString();
-    m_port = m_qSettings.value("port", 5555).toInt();
+    m_port = m_qSettings.value("port", 15001).toInt();
     m_username = m_qSettings.value("username", "user").toString();
     return true;
 }
