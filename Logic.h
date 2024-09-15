@@ -9,15 +9,32 @@
 
 #include "TicTacClient.h"
 
+static const int GRID_SIZE = 3;
+static_assert( GRID_SIZE == 3 ); // must be same as in Scene
+
 class Logic : public QObject, public tic_tac::TicTacClient
 {
     Q_OBJECT
 
-    static const int GRID_SIZE = 3;
+    enum CurrentState {
+        cst_initial,
+        cst_handshaking,
+        cst_waiting_user_choice,
+        cst_inviting,
+        cst_gaming,
+        cst_game_ending,
+    };
+
+
     int m_grid[GRID_SIZE][GRID_SIZE] = {0};
 
     std::string m_playerName;
     std::thread m_thread;
+
+    CurrentState m_currentState = cst_initial;
+    std::string  m_otherPlayerName;
+
+    bool         m_playerRoleX = false;
 
 public:
     Logic( std::string playerName ) : tic_tac::TicTacClient(playerName), m_playerName(playerName)
@@ -43,23 +60,17 @@ public:
 
 
 protected:
+    virtual void onRegistered() override;
+
     virtual void onPlayerListChanged() override;
 
-    // returned 'true'  -> if invitation accepted
-    // returned 'false' -> if invitation rejected
-    virtual bool onInvitation( std::string playName ) override { return true; }
+    virtual void onInvitation( std::string playName ) override {}
 
-    // if 'isAccepted' and returned 'false' -> 'close game'
-    // if 'isAccepted' and returned 'true' -> 'game started'
-    // if '!isAccepted' and returned 'false' -> client go to state 'cst_waiting_user_choice'
-    // if '!isAccepted' and returned 'true' -> client stays in state 'cst_inviting' (in case 2 or more player were invited by us)
-    virtual bool onAcceptedInvitation( std::string playName, bool isAccepted ) override { return true; }
+    virtual void onAcceptedInvitation( std::string playName, bool isAccepted ) override;
 
-    // returned 'false' -> client go to state 'cst_waiting_user_choice'
-    // returned 'true' -> client stays in current state
-    virtual bool onPlayerOfflined( std::string playName ) override { return true; }
+    virtual void onPlayerOfflined( std::string playName ) override {}
 
-    virtual void onPartnerStep( bool isX, int x, int y ) override {}
+    virtual void onPartnerStep( bool isX, int x, int y ) override;
 
 
 public slots:
@@ -68,4 +79,6 @@ public slots:
 signals:
     void positionChanged( QVector<int> ); // Объявляем сигнал с массивом
     void onPlayerListChangedSignal( std::map<std::string,bool> );
+    void onAcceptedInvitationSignal( std::string playerName, bool isAccepted, bool myPlayerRoleIsX );
+    void onPartnerStepSignal( int x, int y, bool isX );
 };

@@ -50,6 +50,20 @@ void MainWindow::init()
         m_waitingInvitationResponseDialog->exec();
     });
 
+    connect( &modelInstance().logic(), &Logic::onAcceptedInvitationSignal, this, [this] (auto parthnerName, bool isAccepted, bool myPlayerRoleIsX )
+    {
+        m_waitingInvitationResponseDialog->close();
+        ui->m_scene->setMyPlayerRole( myPlayerRoleIsX );
+    });
+
+
+    connect( &modelInstance().logic(), &Logic::onPartnerStepSignal, this, [this] ( int x, int y, bool isX )
+    {
+        ui->m_scene->onPartnerStepSlot( x, y, isX );
+    },
+    Qt::QueuedConnection );
+
+
     ui->m_playerTable->setColumnWidth( 0, ui->m_playerTable->width() );
 }
 

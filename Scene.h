@@ -10,8 +10,16 @@ class Scene : public QWidget
 {
     Q_OBJECT
 
+    bool m_myPlayerRoleIsX;
+
 public:
     explicit Scene(QWidget *parent = nullptr);
+
+public:
+    bool setMyPlayerRole( bool myPlayerRoleIsX )
+    {
+        m_myPlayerRoleIsX = myPlayerRoleIsX;
+    }
 
 signals:
     void onClick(int x, int y, int value);
@@ -23,8 +31,9 @@ protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
 
-private:
     int m_grid[3][3]; // Game m_grid
+
+private:
     int currentPlayer; // Current player (1 - X, 2 - O)
     bool gameActive; // Flag indicating if game is active
     int scoreX; // Score for player X
@@ -47,4 +56,7 @@ private slots:
     void resetGameClicked();
     void resetScoreClicked();
     void quitClicked();
+
+public slots:
+    void onPartnerStepSlot( int x, int y, bool isX );
 };

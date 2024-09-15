@@ -1,7 +1,6 @@
 #pragma once
 
 #include <QMainWindow>
-#include "Scene.h"
 #include <functional>
 
 QT_BEGIN_NAMESPACE
@@ -27,7 +26,6 @@ public slots:
 
 private:
     Ui::MainWindow* ui;
-    Scene *scene;
 
     std::function<void()>               m_closeStandaloneTest;
 

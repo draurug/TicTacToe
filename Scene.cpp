@@ -22,6 +22,14 @@ Scene::Scene(QWidget* parent) : QWidget(parent)
 
 }
 
+void Scene::onPartnerStepSlot( int x, int y, bool isX )
+{
+    m_grid[x][y] = isX?1:2;
+
+    emit update();
+}
+
+
 void Scene::positionChanged(QVector<int> vector)
 {
     for( int i = 0; i < 3; i++)
@@ -68,7 +76,7 @@ void Scene::mouseReleaseEvent(QMouseEvent *event)
 
     if (row >= 0 && row < 3 && col >= 0 && col < 3)
     {
-        emit onClick(row, col, 1);
+        emit onClick( row, col, m_myPlayerRoleIsX?1:2 );
 
         // if (m_grid[row][col] == 0)
         // {
