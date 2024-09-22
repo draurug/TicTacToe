@@ -10,13 +10,18 @@ class Scene : public QWidget
 {
     Q_OBJECT
 
-    bool m_myPlayerRoleIsX;
+    bool    m_myPlayerRoleIsX;
+    int     m_grid[3][3]; // Game m_grid
+
+    bool    m_paintLastStep = false;
+    QPoint  m_lastStep;
+
 
 public:
     explicit Scene(QWidget *parent = nullptr);
 
 public:
-    bool setMyPlayerRole( bool myPlayerRoleIsX )
+    void setMyPlayerRole( bool myPlayerRoleIsX )
     {
         m_myPlayerRoleIsX = myPlayerRoleIsX;
     }
@@ -25,13 +30,12 @@ signals:
     void onClick(int x, int y, int value);
 
 public slots:
-    void positionChanged(QVector<int>);
+    void onPartnerStepSlot( int x, int y, bool isX );
+    void positionChanged( QVector<int>, int lastX, int lastY );
 
 protected:
     void paintEvent(QPaintEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
-
-    int m_grid[3][3]; // Game m_grid
 
 private:
     int currentPlayer; // Current player (1 - X, 2 - O)
@@ -57,6 +61,4 @@ private slots:
     void resetScoreClicked();
     void quitClicked();
 
-public slots:
-    void onPartnerStepSlot( int x, int y, bool isX );
 };

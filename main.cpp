@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     usleep(1000);
 
-    tic_tac::DbgTicTacClient client( "Player2" );
+    tic_tac::DbgTicTacClient client( "DbgPlayer" );
 
     auto clientThread = std::thread( [&]
     {

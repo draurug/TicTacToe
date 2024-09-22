@@ -26,11 +26,22 @@ void Scene::onPartnerStepSlot( int x, int y, bool isX )
 {
     m_grid[x][y] = isX?1:2;
 
+    if ( (x >= 0 && x < 3) && (y >= 0 && y < 3) )
+    {
+        m_lastStep.setX( x );
+        m_lastStep.setY( y );
+        m_paintLastStep = true;
+    }
+    else
+    {
+        m_paintLastStep = false;
+    }
+
     emit update();
 }
 
 
-void Scene::positionChanged(QVector<int> vector)
+void Scene::positionChanged( QVector<int> vector, int lastX, int lastY )
 {
     for( int i = 0; i < 3; i++)
     {
@@ -39,6 +50,9 @@ void Scene::positionChanged(QVector<int> vector)
             m_grid[i][j] = vector[i*3 + j];
         }
     }
+
+    m_paintLastStep = false;
+
     emit update();
 }
 
@@ -56,8 +70,18 @@ void Scene::paintEvent(QPaintEvent* event)
 
     // Draw crosses and circles
     for (int i = 0; i < 3; ++i) {
-        for (int j = 0; j < 3; ++j) {
-            if (m_grid[i][j] == 1) {
+        for (int j = 0; j < 3; ++j)
+        {
+            if ( m_paintLastStep && m_lastStep.x() == i && m_lastStep.y() == j )
+            {
+                painter.setPen( Qt::red );
+            }
+            else
+            {
+                painter.setPen( Qt::black );
+            }
+
+            if ( m_grid[i][j] == 1 ) {
                 drawCross(painter, j * width() / 3, i * height() / 3, width() / 3);
             } else if (m_grid[i][j] == 2) {
                 drawCircle(painter, j * width() / 3, i * height() / 3, width() / 3);

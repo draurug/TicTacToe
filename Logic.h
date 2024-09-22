@@ -20,13 +20,14 @@ class Logic : public QObject, public tic_tac::TicTacClient
         cst_initial,
         cst_handshaking,
         cst_waiting_user_choice,
+        cst_invite_responding,
         cst_inviting,
         cst_gaming,
         cst_game_ending,
     };
 
 
-    int m_grid[GRID_SIZE][GRID_SIZE] = {0};
+    int m_mainGrid[GRID_SIZE][GRID_SIZE] = {0};
 
     std::string m_playerName;
     std::thread m_thread;
@@ -37,8 +38,7 @@ class Logic : public QObject, public tic_tac::TicTacClient
     bool         m_playerRoleX = false;
 
 public:
-    Logic( std::string playerName ) : tic_tac::TicTacClient(playerName), m_playerName(playerName)
-    {}
+    Logic( std::string playerName );
 
     void runTcpClient( std::string addr, std::string port )
     {
@@ -64,21 +64,25 @@ protected:
 
     virtual void onPlayerListChanged() override;
 
-    virtual void onInvitation( std::string playName ) override {}
+    virtual void onInvitation( std::string playName ) override;
 
     virtual void onAcceptedInvitation( std::string playName, bool isAccepted ) override;
 
     virtual void onPlayerOfflined( std::string playName ) override {}
 
-    virtual void onPartnerStep( bool isX, int x, int y ) override;
+    virtual void onPartnerStep( std::string partnerName, bool isX, int x, int y ) override;
 
 
 public slots:
     void onClick(int x, int y, int value);
 
+private:
 signals:
-    void positionChanged( QVector<int> ); // Объявляем сигнал с массивом
+    void positionChanged( QVector<int> , int lastX, int lastY ); // Объявляем сигнал с массивом
     void onPlayerListChangedSignal( std::map<std::string,bool> );
     void onAcceptedInvitationSignal( std::string playerName, bool isAccepted, bool myPlayerRoleIsX );
     void onPartnerStepSignal( int x, int y, bool isX );
+
+    void onInviteSignal( std::string playerName );
+    void runOnMainThread( std::function<void()> );
 };
