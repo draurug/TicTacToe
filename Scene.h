@@ -10,7 +10,6 @@ class Scene : public QWidget
 {
     Q_OBJECT
 
-    bool    m_myPlayerRoleIsX;
     int     m_grid[3][3]; // Game m_grid
 
     bool    m_paintLastStep = false;
@@ -20,14 +19,9 @@ class Scene : public QWidget
 public:
     explicit Scene(QWidget *parent = nullptr);
 
-public:
-    void setMyPlayerRole( bool myPlayerRoleIsX )
-    {
-        m_myPlayerRoleIsX = myPlayerRoleIsX;
-    }
 
 signals:
-    void onClick(int x, int y, int value);
+    void onClick(int x, int y );
 
 public slots:
     void onPartnerStepSlot( int x, int y, bool isX );

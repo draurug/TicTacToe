@@ -100,7 +100,7 @@ void Scene::mouseReleaseEvent(QMouseEvent *event)
 
     if (row >= 0 && row < 3 && col >= 0 && col < 3)
     {
-        emit onClick( row, col, m_myPlayerRoleIsX?1:2 );
+        emit onClick( row, col );
 
         // if (m_grid[row][col] == 0)
         // {

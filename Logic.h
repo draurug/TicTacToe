@@ -26,19 +26,22 @@ class Logic : public QObject, public tic_tac::TicTacClient
         cst_game_ending,
     };
 
+    CurrentState m_currentState = cst_initial;
+    bool m_makingStep = false;
 
     int m_mainGrid[GRID_SIZE][GRID_SIZE] = {0};
 
     std::string m_playerName;
     std::thread m_thread;
 
-    CurrentState m_currentState = cst_initial;
     std::string  m_otherPlayerName;
 
     bool         m_playerRoleX = false;
 
 public:
     Logic( std::string playerName );
+
+    bool makingStep() { return m_makingStep; }
 
     void runTcpClient( std::string addr, std::string port )
     {
@@ -74,7 +77,7 @@ protected:
 
 
 public slots:
-    void onClick(int x, int y, int value);
+    void onClick(int x, int y );
 
 private:
 signals:
@@ -85,4 +88,5 @@ signals:
 
     void onInviteSignal( std::string playerName );
     void runOnMainThread( std::function<void()> );
+    void updatePlayerStateSignal();
 };

@@ -1,8 +1,10 @@
 //v3
 #include "Settings.h"
+#include <QCoreApplication>
 
 Settings::Settings()
-    : m_qSettings("MyCompanyTicTac", "MyAppTicTac")  // Инициализация QSettings с указанием компании и приложения
+    : //m_qSettings("MyCompanyTicTac", "MyAppTicTac")  // Инициализация QSettings с указанием компании и приложения
+      m_qSettings(QCoreApplication::applicationDirPath() + "/preferences.ini", QSettings::IniFormat )
 {
     load();  // Загрузка настроек при создании объекта
 }

@@ -76,6 +76,27 @@
      <string>Settings</string>
     </property>
    </widget>
+   <widget class="QLabel" name="m_makeStepLabel">
+    <property name="geometry">
+     <rect>
+      <x>481</x>
+      <y>24</y>
+      <width>193</width>
+      <height>57</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color : red</string>
+    </property>
+    <property name="text">
+     <string>Make Your Step</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

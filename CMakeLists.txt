@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_definitions(-DSTANDALONE_TEST)
+#add_definitions(-DSTANDALONE_TEST)
 set(PROJECT_SOURCES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/Server-Lessons/EasyTcpServerClient)
 add_subdirectory(Server-Lessons/EasyTcpServerClient)

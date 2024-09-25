@@ -30,13 +30,13 @@ Logic::Logic( std::string playerName ) : tic_tac::TicTacClient(playerName), m_pl
 //    Qt::QueuedConnection );
 }
 
-void Logic::onClick(int x, int y, int value)
+void Logic::onClick(int x, int y )
 {
     if (x >= 0 && x <=3 && y >=0 && y <=3 )
     {
         if (m_mainGrid[x][y] == 0)
         {
-            m_mainGrid[x][y] = value;
+            m_mainGrid[x][y] = m_playerRoleX?1:2;
             QVector<int> vector;
             for( int i = 0; i < 3; i++)
             {
@@ -47,6 +47,8 @@ void Logic::onClick(int x, int y, int value)
             }
             emit positionChanged( vector, -1, -1 );
             sendStep( m_otherPlayerName, m_playerRoleX?"X":"0", std::to_string(x), std::to_string(y) );
+            m_makingStep = false;
+            emit updatePlayerStateSignal();
         }
 
     }
@@ -85,7 +87,6 @@ void Logic::onInvitation( std::string playerName )
     {
         m_currentState = cst_invite_responding;
 
-        //emit onInviteSignal( playerName );
         emit runOnMainThread( [playerName,this]
         {
             InviteDialog dialog( QString::fromStdString(playerName) );
@@ -93,15 +94,17 @@ void Logic::onInvitation( std::string playerName )
 
             if ( rc == QDialog::Accepted )
             {
-                sendInvitaionResponse( playerName, true );
                 m_currentState = cst_gaming;
-                QMessageBox::information( nullptr, "Make Step", "Make your 1-st step" );
+                m_otherPlayerName = playerName;
+                m_makingStep = true;
+                m_playerRoleX = true;
+                sendInvitaionResponse( playerName, true );
+                emit updatePlayerStateSignal();
+                return;
             }
-            else
-            {
-                sendInvitaionResponse( playerName, false );
-                m_currentState = cst_waiting_user_choice;
-            }
+
+            m_currentState = cst_waiting_user_choice;
+            sendInvitaionResponse( playerName, false );
         });
     }
     else
@@ -121,6 +124,7 @@ void Logic::onAcceptedInvitation( std::string playerName, bool isAccepted )
 
     if ( isAccepted )
     {
+        m_playerRoleX = false;
         m_currentState = cst_gaming;
     }
     else
@@ -146,6 +150,9 @@ void Logic::onPartnerStep( std::string parthnerName, bool isX, int x, int y )
         {
             m_mainGrid[x][y] = 2;
         }
+        m_makingStep = true;
+        emit updatePlayerStateSignal();
+
+        emit onPartnerStepSignal( x, y, isX );
     }
-    emit onPartnerStepSignal( x, y, isX );
 }

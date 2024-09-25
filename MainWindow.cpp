@@ -21,6 +21,9 @@ MainWindow::MainWindow( std::function<void()> closeStandaloneTest, QWidget *pare
 void MainWindow::init()
 {
     ui->setupUi(this);
+
+    ui->m_makeStepLabel->hide();
+
     connect( ui->m_scene, &Scene::onClick, &modelInstance().logic(), &Logic::onClick );
     connect( &modelInstance().logic(), &Logic::positionChanged, ui->m_scene, &Scene::positionChanged );
     connect( &modelInstance().logic(), &Logic::onPlayerListChangedSignal, this, &MainWindow::onPlayerListChangedSlot, Qt::QueuedConnection );
@@ -53,7 +56,6 @@ void MainWindow::init()
     connect( &modelInstance().logic(), &Logic::onAcceptedInvitationSignal, this, [this] (auto parthnerName, bool isAccepted, bool myPlayerRoleIsX )
     {
         m_waitingInvitationResponseDialog->close();
-        ui->m_scene->setMyPlayerRole( myPlayerRoleIsX );
     });
 
 
@@ -62,6 +64,11 @@ void MainWindow::init()
         ui->m_scene->onPartnerStepSlot( x, y, isX );
     },
     Qt::QueuedConnection );
+
+    connect( &modelInstance().logic(), &Logic::updatePlayerStateSignal, this, [this]
+    {
+        ui->m_makeStepLabel->setVisible( modelInstance().logic().makingStep() );
+    });
 
 
     ui->m_playerTable->setColumnWidth( 0, ui->m_playerTable->width() );
