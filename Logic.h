@@ -45,9 +45,9 @@ public:
 
     void runTcpClient( std::string addr, std::string port )
     {
-        m_thread = std::thread( [this]
+        m_thread = std::thread( [addr,port,this]
         {
-            tic_tac::TicTacClient::run( "127.0.0.1", "15001" );
+            tic_tac::TicTacClient::run( addr, port );
         });
     }
 
